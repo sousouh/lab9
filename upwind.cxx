@@ -62,7 +62,7 @@ void initialize(double* const u, const double dx, const double xmin,
    for(int i=0; i<N; i++)
    {
      double x = xmin + i*dx;
-     if (abs(x)<=1.0)
+     if (fabs(x)<=1.0)
        u[i] = 1;
      else
       u[i] =0;
