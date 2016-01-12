@@ -10,17 +10,33 @@ void writeToFile(const double* const u, const string s, const double dx,
                  const double xmin, const int N);
 void initialize(double* const u, const double dx, const double xmin,
                 const int N);
-//---------------------------------------
+ 
+/*void upwind( double* u0, double* u1, const double v,const double dt, const double dx, const double N){
+       for(int n=1; n<N ; n++){
+	 
+      u1[n] = u0[n]-v*(dt/dx)*(u0[n]-u0[(n-1)]); 
+      
+     }
+}*/
+
+void FTCS( double* u0, double* u1, const double v,const double dt, const double dx, const double N){
+       for(int n=1; n<N-1 ; n++){
+	 
+      u1[n] = u0[n]-v*(dt/(2*dx))*(u0[(n+1)]-u0[(n-1)]); 
+      
+     }
+}
+
 int main(){
 
-  const double tEnd = ;
-  const double V = ;
+  const double tEnd = 5.;
+  const double v = 1;
 
-  const int N  = ;
-  const double xmin = -10;
-  const double xmax =  10;
+  const int N  = 256;
+  const double xmin = -10.;
+  const double xmax =  10.;
   const double dx = (xmax-xmin)/(N-1);
-  double dt = ;
+  double dt = double(dx/v);
   const int Na = 10; // Number of output files up to tEnd
   const int Nk = int(tEnd/Na/dt);
 
@@ -39,7 +55,16 @@ int main(){
    for(int j=0; j<Nk; j++){
 
       // Put call to step function here
-
+     
+  //upwind(u0,u1,v,dt,dx,N);
+  FTCS(u0,u1,v,dt,dx,N);
+  
+      
+   h=u0;
+   u0=u1;
+   u1=h;
+ 
+ 
       // swap arrays u0 <-> u1,
       // however do not copy values, be more clever ;)
    }
